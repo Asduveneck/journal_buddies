@@ -45,9 +45,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_14_080341) do
     t.boolean "editable"
     t.date "scheduled_date"
     t.bigint "journal_id", null: false
+    t.bigint "parent_prompt_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["journal_id"], name: "index_prompts_on_journal_id"
+    t.index ["parent_prompt_id"], name: "index_prompts_on_parent_prompt_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -65,4 +67,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_14_080341) do
   add_foreign_key "journals_users", "journals"
   add_foreign_key "journals_users", "users"
   add_foreign_key "prompts", "journals"
+  add_foreign_key "prompts", "prompts", column: "parent_prompt_id"
 end
