@@ -1,12 +1,19 @@
 class Api::JournalsController < ApplicationController
-  # def create
-  # end
+  def create
+    @journal = Journal.new(permitted_params)
 
-  # def show
-  # end
+    if @journal.save
+      render @journal.to_json
+    else
+      render json: @journal.errors.full_messages, status :unprocessable_entity
+    end
+  end
 
-  # def update
-  # end
+  def show
+    render @journal.to_json
+  end
+
+  # update - only users with permitted roles should be able to
 
   private
   
