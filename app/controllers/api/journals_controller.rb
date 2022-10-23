@@ -3,9 +3,9 @@ class Api::JournalsController < ApplicationController
     @journal = Journal.new(permitted_params)
 
     if @journal.save
-      render @journal.to_json
+      render json: @journal
     else
-      render json: @journal.errors.full_messages, status :unprocessable_entity
+      render json: @journal.errors.full_messages, status: :unprocessable_entity
     end
   end
 
