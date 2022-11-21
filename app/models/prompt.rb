@@ -1,6 +1,7 @@
 class Prompt < ApplicationRecord
   belongs_to :journal
   belongs_to :parent_prompt, :class_name => "Prompt"
+  # food for thought: parent_prompts have schedule?
   has_many :prompts, :foreign_key => "parent_prompt_id"
   has_many :entries
 
