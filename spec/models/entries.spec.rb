@@ -42,6 +42,8 @@ RSpec.describe ::Entry, type: :model do
   end
 
   describe '#sibling_entries' do
+    # WAIT: may make sense to add a master or schedulable prompt, and since that is more important,
+    # don't nother with this spec until I add that table and fix the prompts table to not reference itself
     # TODO: refactor via following, which will hopefully fix all the association specs...
     # see https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md#has_many-associations
     let(:prompt) { build_stubbed(:prompt, title: 'What did you eat today?') }
