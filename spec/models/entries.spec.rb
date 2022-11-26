@@ -42,6 +42,8 @@ RSpec.describe ::Entry, type: :model do
   end
 
   describe '#sibling_entries' do
+    # TODO: refactor via following, which will hopefully fix all the association specs...
+    # see https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md#has_many-associations
     let(:prompt) { build_stubbed(:prompt, title: 'What did you eat today?') }
     let(:user_one) { build_stubbed(:user, first_name: 'Sam') }
     let(:user_two) { build_stubbed(:user, first_name: 'Fran') }
