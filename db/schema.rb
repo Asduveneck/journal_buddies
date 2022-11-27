@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_14_080341) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,11 +45,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_14_080341) do
     t.boolean "editable"
     t.date "scheduled_date"
     t.bigint "journal_id", null: false
-    t.bigint "parent_prompt_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "recurring_prompts_id"
     t.index ["journal_id"], name: "index_prompts_on_journal_id"
-    t.index ["parent_prompt_id"], name: "index_prompts_on_parent_prompt_id"
+    t.index ["recurring_prompts_id"], name: "index_prompts_on_recurring_prompts_id"
+  end
+
+  create_table "recurring_prompts", force: :cascade do |t|
+    t.string "title"
+    t.boolean "is_active"
+    t.boolean "is_time_important"
+    t.datetime "start_date"
+    t.string "schedule_type", limit: 4
+    t.integer "schedule_interval"
+    t.bigint "journal_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["journal_id"], name: "index_recurring_prompts_on_journal_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -67,5 +80,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_14_080341) do
   add_foreign_key "journals_users", "journals"
   add_foreign_key "journals_users", "users"
   add_foreign_key "prompts", "journals"
-  add_foreign_key "prompts", "prompts", column: "parent_prompt_id"
+  add_foreign_key "prompts", "recurring_prompts", column: "recurring_prompts_id"
+  add_foreign_key "recurring_prompts", "journals"
 end
