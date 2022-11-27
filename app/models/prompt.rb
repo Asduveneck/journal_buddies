@@ -1,13 +1,15 @@
 class Prompt < ApplicationRecord
   belongs_to :journal
-  belongs_to :parent_prompt, :class_name => "Prompt"
-  # food for thought: parent_prompts have schedule?
-  has_many :prompts, :foreign_key => "parent_prompt_id"
+  belongs_to :recurring_prompt
   has_many :entries
 
   def sibling_prompts
-    return [] unless parent_prompt
+    return [] unless recurring_prompt
 
-    return parent_prompt.prompts
+    return recurring_prompt.prompts
+  end
+
+  def prompt_title
+    return title || recurring_prompt.title || ""
   end
 end
