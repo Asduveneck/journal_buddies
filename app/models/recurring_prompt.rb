@@ -12,21 +12,28 @@ class RecurringPrompt < ApplicationRecord
 
   private
 
-  def daily_schedule?
-    schedule_type == "d"
-  end
-
-  def weekly_schedule?
-    schedule_type == "w"
-  end
-
-  def monthly_schedule?
-    schedule_type == "m"
+  def processed_recurring_prompt
+    @processed_recurring_prompt ||= begin
+      return RecurringPromptScheduleTypes::AnnualPrompt.new(self) if annual_schedule?
+      return RecurringPromptScheduleTypes::DailyPrompt.new(self) if adaily_schedule?
+      return RecurringPromptScheduleTypes::MonthlyPrompt.new(self) if amonthly_schedule?
+      return RecurringPromptScheduleTypes::WeeklyPrompt.new(self) if weekly_schedule?
+    end
   end
 
   def annual_schedule?
     schedule_type == "a"
   end
 
+  def daily_schedule?
+    schedule_type == "d"
+  end
 
+  def monthly_schedule?
+    schedule_type == "m"
+  end
+
+  def weekly_schedule?
+    schedule_type == "w"
+  end
 end
