@@ -5,9 +5,13 @@ class RecurringPrompt < ApplicationRecord
 
   # handle schedule the schedule
   def create_prompt
+    return nil unless should_create_prompt?
+
+    Prompt.new(editable: true, recurring_prompts_id: id)
   end
 
-  def should_create_prompt
+  def should_create_prompt?
+    @processed_recurring_prompt.should_create_prompt?
   end
 
   private
