@@ -1,5 +1,6 @@
 module RecurringPromptScheduleTypes
   class DailyPrompt
+    # where is constructor?
     def should_create_prompt?
       return false if already_made_prompt?
 

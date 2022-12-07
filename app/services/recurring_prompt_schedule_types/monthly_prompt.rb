@@ -1,5 +1,6 @@
 module RecurringPromptScheduleTypes
   class MonthlyPrompt
+    # where is constructor?
     def should_create_prompt?
       return false unless current_time_is_scheduled_date?
 
