@@ -17,12 +17,14 @@ class RecurringPrompt < ApplicationRecord
   private
 
   def processed_recurring_prompt
-    @processed_recurring_prompt ||= begin
-      return RecurringPromptScheduleTypes::AnnualPrompt.new(self) if annual_schedule?
-      return RecurringPromptScheduleTypes::DailyPrompt.new(self) if adaily_schedule?
-      return RecurringPromptScheduleTypes::MonthlyPrompt.new(self) if amonthly_schedule?
-      return RecurringPromptScheduleTypes::WeeklyPrompt.new(self) if weekly_schedule?
-    end
+    @processed_recurring_prompt ||= process_schedule
+  end
+
+  def process_schedule
+    return RecurringPromptScheduleTypes::AnnualPrompt.new(self) if annual_schedule?
+    return RecurringPromptScheduleTypes::DailyPrompt.new(self) if daily_schedule?
+    return RecurringPromptScheduleTypes::MonthlyPrompt.new(self) if monthly_schedule?
+    return RecurringPromptScheduleTypes::WeeklyPrompt.new(self) if weekly_schedule?
   end
 
   def annual_schedule?
