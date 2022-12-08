@@ -1,6 +1,10 @@
 module RecurringPromptScheduleTypes
   class MonthlyPrompt
-    # where is constructor?
+
+    def initialize(recurring_prompt)
+      @recurring_prompt = recurring_prompt
+    end
+
     def should_create_prompt?
       return false unless current_time_is_scheduled_date?
 
@@ -20,7 +24,7 @@ module RecurringPromptScheduleTypes
     end
 
     def most_recent_prompt
-      @most_recent_prompt ||= prompts.last
+      @most_recent_prompt ||= recurring_prompt.prompts.last
     end
 
     def current_time

@@ -1,5 +1,10 @@
 module RecurringPromptScheduleTypes
   class WeeklyPrompt
+
+    def initialize(recurring_prompt)
+      @recurring_prompt = recurring_prompt
+    end
+
     # where is constructor?
     # mixin for some shared functionality?
     def should_create_prompt?
@@ -22,7 +27,7 @@ module RecurringPromptScheduleTypes
     end
 
     def most_recent_prompt
-      @most_recent_prompt ||= prompts.last
+      @most_recent_prompt ||= recurring_prompt.prompts.last
     end
 
     def current_time
