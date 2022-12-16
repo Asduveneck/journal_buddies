@@ -31,16 +31,16 @@ module RecurringPromptScheduleTypes
     end
 
     def same_month?
-      most_recent_prompt&.created_at&.month == Time.now.month
+      most_recent_prompt&.created_at&.month == current_time.month
     end
 
     # date or day?
     def same_date?
-      most_recent_prompt&.created_at&.day == Time.now.day
+      most_recent_prompt&.created_at&.day == current_time.day
     end
 
     def same_year?
-      most_recent_prompt&.created_at&.year == Time.now.year
+      most_recent_prompt&.created_at&.year == current_time.year
     end
   end
 end
