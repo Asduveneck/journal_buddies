@@ -18,6 +18,10 @@ case $COMMAND in
     docker compose run web bin/rails db:migrate "$@"
   ;;
 
+  rails-console | r-c )
+    docker compose run web bin/rails console
+  ;;
+
   rspec )
     docker compose run web bundle exec rspec "$@"
   ;;

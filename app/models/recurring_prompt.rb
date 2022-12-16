@@ -1,9 +1,8 @@
 class RecurringPrompt < ApplicationRecord
   belongs_to :journal
-
   has_many :prompts
 
-  # handle schedule the schedule
+  # handle schedule
   def create_prompt
     return nil unless should_create_prompt?
 
@@ -11,7 +10,7 @@ class RecurringPrompt < ApplicationRecord
   end
 
   def should_create_prompt?
-    @processed_recurring_prompt.should_create_prompt?
+    processed_recurring_prompt.should_create_prompt?
   end
 
   private
@@ -20,6 +19,7 @@ class RecurringPrompt < ApplicationRecord
     @processed_recurring_prompt ||= process_schedule
   end
 
+  # strategy pattern
   def process_schedule
     return RecurringPromptScheduleTypes::AnnualPrompt.new(self) if annual_schedule?
     return RecurringPromptScheduleTypes::DailyPrompt.new(self) if daily_schedule?

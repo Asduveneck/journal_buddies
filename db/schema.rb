@@ -47,9 +47,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
     t.bigint "journal_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "recurring_prompts_id"
+    t.bigint "recurring_prompt_id"
     t.index ["journal_id"], name: "index_prompts_on_journal_id"
-    t.index ["recurring_prompts_id"], name: "index_prompts_on_recurring_prompts_id"
+    t.index ["recurring_prompt_id"], name: "index_prompts_on_recurring_prompt_id"
   end
 
   create_table "recurring_prompts", force: :cascade do |t|
@@ -80,6 +80,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
   add_foreign_key "journals_users", "journals"
   add_foreign_key "journals_users", "users"
   add_foreign_key "prompts", "journals"
-  add_foreign_key "prompts", "recurring_prompts", column: "recurring_prompts_id"
+  add_foreign_key "prompts", "recurring_prompts"
   add_foreign_key "recurring_prompts", "journals"
 end

@@ -1,6 +1,8 @@
 module RecurringPromptScheduleTypes
   class DailyPrompt
 
+    attr_reader :recurring_prompt
+
     def initialize(recurring_prompt)
       @recurring_prompt = recurring_prompt
     end
@@ -24,7 +26,7 @@ module RecurringPromptScheduleTypes
     end
 
     def most_recent_prompt
-      @most_recent_prompt ||= recurring_prompt.prompts.last
+      @most_recent_prompt ||= @recurring_prompt.prompts.last
     end
 
     def current_time
@@ -32,15 +34,16 @@ module RecurringPromptScheduleTypes
     end
 
     def same_month?
-      most_recent_prompt&.scheduled_date.year == Time.now.month
+      most_recent_prompt&.created_at&.month == Time.now.month
     end
 
-    def same_day?
-      most_recent_prompt&.scheduled_date.year == Time.now.day
+    # date or day?
+    def same_date?
+      most_recent_prompt&.created_at&.day == Time.now.day
     end
 
     def same_year?
-      most_recent_prompt&.scheduled_date.year == Time.now.year
+      most_recent_prompt&.created_at&.year == Time.now.year
     end
   end
 end

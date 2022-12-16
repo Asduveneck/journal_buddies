@@ -9,6 +9,9 @@ class Prompt < ApplicationRecord
     return recurring_prompt.prompts
   end
 
+  # does a prompt need a scheduled date?
+
+
   def prompt_title
     return title || recurring_prompt.title || ""
   end
