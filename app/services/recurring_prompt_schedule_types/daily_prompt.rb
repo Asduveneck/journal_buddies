@@ -1,13 +1,11 @@
 module RecurringPromptScheduleTypes
   class DailyPrompt
-
     attr_reader :recurring_prompt
 
     def initialize(recurring_prompt)
       @recurring_prompt = recurring_prompt
     end
 
-    # where is constructor?
     def should_create_prompt?
       return false if already_made_prompt?
 
@@ -17,7 +15,6 @@ module RecurringPromptScheduleTypes
     private
 
     def already_made_prompt?
-      # figure out what to do here...
       same_date? && same_month? && same_year?
     end
 
