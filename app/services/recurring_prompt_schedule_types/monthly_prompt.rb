@@ -17,7 +17,7 @@ module RecurringPromptScheduleTypes
     private
 
     def current_time_is_scheduled_date?
-      current_time.day == scheduled_date.schedule_interval
+      current_time.day == @recurring_prompt.schedule_interval
     end
 
     def already_made_prompt?
