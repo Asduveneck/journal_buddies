@@ -6,7 +6,6 @@ module RecurringPromptScheduleTypes
       @recurring_prompt = recurring_prompt
     end
 
-    # where is constructor?
     # mixin for some shared functionality?
     def should_create_prompt?
       return false unless current_time_is_scheduled_date?

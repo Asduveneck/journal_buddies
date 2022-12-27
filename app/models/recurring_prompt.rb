@@ -2,7 +2,6 @@ class RecurringPrompt < ApplicationRecord
   belongs_to :journal
   has_many :prompts
 
-  # handle schedule
   def create_prompt
     return nil unless should_create_prompt?
 

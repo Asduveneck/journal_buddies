@@ -15,7 +15,7 @@ module RecurringPromptScheduleTypes
     private
 
     def already_made_prompt?
-      same_date? && same_month? && same_year?
+      same_day? && same_month? && same_year?
     end
 
     def most_recent_prompt_date_same_year?
@@ -34,8 +34,7 @@ module RecurringPromptScheduleTypes
       most_recent_prompt&.created_at&.month == current_time.month
     end
 
-    # date or day?
-    def same_date?
+    def same_day?
       most_recent_prompt&.created_at&.day == current_time.day
     end
 

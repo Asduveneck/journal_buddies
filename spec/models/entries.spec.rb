@@ -31,7 +31,6 @@ RSpec.describe ::Entry, type: :model do
   end
 
   describe '#prompt_text' do
-    # Warning: Factorybot / Factorygirl not installed yet...
     let(:prompt) { build_stubbed(:prompt, title: "What did you eat today?") }
     let(:user) { build_stubbed(:user, first_name: "Sam") }
     let(:entry) { build_stubbed(:entry, prompt_id: prompt.id, user_id: user.id) }
