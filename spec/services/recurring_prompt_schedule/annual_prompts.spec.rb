@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ::RecurringPromptScheduleTypes::AnnualPrompt, type: :service do
+RSpec.describe ::RecurringPromptScheduleStrategies::AnnualPrompt, type: :service do
   frozen_time = Time.local(2008, 9, 1, 10, 13)
   let(:recurring_prompt) { build_stubbed(:recurring_prompt, :annual )}
   subject(:should_create_prompt?) { recurring_prompt&.should_create_prompt? }

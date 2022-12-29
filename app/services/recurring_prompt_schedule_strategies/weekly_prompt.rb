@@ -1,4 +1,4 @@
-module RecurringPromptScheduleTypes
+module RecurringPromptScheduleStrategies
   class WeeklyPrompt
     attr_reader :recurring_prompt
 

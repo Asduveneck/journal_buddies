@@ -20,10 +20,10 @@ class RecurringPrompt < ApplicationRecord
 
   # strategy pattern
   def process_schedule
-    return RecurringPromptScheduleTypes::AnnualPrompt.new(self) if annual_schedule?
-    return RecurringPromptScheduleTypes::DailyPrompt.new(self) if daily_schedule?
-    return RecurringPromptScheduleTypes::MonthlyPrompt.new(self) if monthly_schedule?
-    return RecurringPromptScheduleTypes::WeeklyPrompt.new(self) if weekly_schedule?
+    return RecurringPromptScheduleStrategies::AnnualPrompt.new(self) if annual_schedule?
+    return RecurringPromptScheduleStrategies::DailyPrompt.new(self) if daily_schedule?
+    return RecurringPromptScheduleStrategies::MonthlyPrompt.new(self) if monthly_schedule?
+    return RecurringPromptScheduleStrategies::WeeklyPrompt.new(self) if weekly_schedule?
   end
 
   def annual_schedule?
