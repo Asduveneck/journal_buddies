@@ -19,10 +19,12 @@ module RecurringPromptScheduleStrategies
 
     def current_time_is_scheduled_date?
       # note: 0..6
-      current_time.wday == @recurring_prompt..schedule_interval
+      current_time.wday == @recurring_prompt.schedule_interval
     end
 
     def already_made_prompt?
+      return true if most_recent_prompt.nil?
+
       same_year? && same_day? && same_month?
     end
 
@@ -35,15 +37,15 @@ module RecurringPromptScheduleStrategies
     end
 
     def same_month?
-      most_recent_prompt&.scheduled_date.year == current_time.month
+      most_recent_prompt&.created_at.month == current_time.month
     end
 
     def same_day?
-      most_recent_prompt&.scheduled_date.year == current_time.day
+      most_recent_prompt&.created_at.day == current_time.day
     end
 
     def same_year?
-      most_recent_prompt&.scheduled_date.year == current_time.year
+      most_recent_prompt&.created_at.year == current_time.year
     end
   end
 end

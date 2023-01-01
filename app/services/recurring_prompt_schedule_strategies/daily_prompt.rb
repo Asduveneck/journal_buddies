@@ -18,12 +18,8 @@ module RecurringPromptScheduleStrategies
       same_day? && same_month? && same_year?
     end
 
-    def most_recent_prompt_date_same_year?
-      most_recent_prompt&.scheduled_date.year == current_time.year
-    end
-
     def most_recent_prompt
-      @most_recent_prompt ||= @recurring_prompt.prompts.last
+      @most_recent_prompt ||= recurring_prompt.prompts.last
     end
 
     def current_time
