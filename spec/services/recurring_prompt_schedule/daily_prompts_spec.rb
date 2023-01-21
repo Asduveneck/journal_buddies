@@ -4,7 +4,7 @@ RSpec.describe ::RecurringPromptScheduleStrategies::DailyPrompt, type: :service 
   frozen_time = Time.local(2008, 9, 1, 10, 13)
   let(:prompts) { [] }
   let(:recurring_prompt) { build_stubbed(:recurring_prompt, :daily, prompts: prompts )}
-  subject(:should_create_prompt?) { recurring_prompt&.should_create_prompt? }
+  subject(:create_prompt?) { recurring_prompt&.create_prompt? }
 
   before(:context) { Timecop.freeze(frozen_time) }
   after(:context) { Timecop.return }

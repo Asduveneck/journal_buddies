@@ -7,7 +7,7 @@ module RecurringPromptScheduleStrategies
     end
 
     # mixin for some shared functionality?
-    def should_create_prompt?
+    def create_prompt?
       return false unless current_time_is_scheduled_date?
 
       return false if already_made_prompt?

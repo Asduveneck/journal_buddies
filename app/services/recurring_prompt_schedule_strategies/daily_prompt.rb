@@ -6,7 +6,7 @@ module RecurringPromptScheduleStrategies
       @recurring_prompt = recurring_prompt
     end
 
-    def should_create_prompt?
+    def create_prompt?
       return false if already_made_prompt?
 
       return true

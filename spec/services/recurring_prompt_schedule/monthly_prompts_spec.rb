@@ -6,7 +6,7 @@ RSpec.describe ::RecurringPromptScheduleStrategies::MonthlyPrompt, type: :servic
   let(:recurring_prompt) do
     build_stubbed(:recurring_prompt, :monthly, schedule_interval: frozen_time.day, prompts: prompts )
   end
-  subject(:should_create_prompt?) { recurring_prompt&.should_create_prompt? }
+  subject(:create_prompt?) { recurring_prompt&.create_prompt? }
 
   before(:context) { Timecop.freeze(frozen_time) }
   after(:context) { Timecop.return }

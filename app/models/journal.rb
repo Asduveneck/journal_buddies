@@ -5,5 +5,7 @@ class Journal < ApplicationRecord
   has_many :users, through: :journals_users
 
   # Recurring prompts and prompts should be handled
-
+  def pending_recurring_prompts
+    recurring_prompts.filter { |recurring_prompt| recurring_prompt.create_prompt? }
+  end
 end

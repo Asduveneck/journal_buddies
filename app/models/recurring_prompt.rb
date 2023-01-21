@@ -3,13 +3,13 @@ class RecurringPrompt < ApplicationRecord
   has_many :prompts
 
   def create_prompt
-    return nil unless should_create_prompt?
+    return nil unless create_prompt?
 
     Prompt.new(editable: true, recurring_prompts_id: id)
   end
 
-  def should_create_prompt?
-    processed_recurring_prompt.should_create_prompt?
+  def create_prompt?
+    processed_recurring_prompt.create_prompt?
   end
 
   private
