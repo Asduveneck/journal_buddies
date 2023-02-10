@@ -6,6 +6,10 @@ class Journal < ApplicationRecord
 
   # Recurring prompts and prompts should be handled
   def pending_recurring_prompts
-    recurring_prompts.filter { |recurring_prompt| recurring_prompt.create_prompt? }
+    @pending_recurring_prompts ||= recurring_prompts.filter { |recurring_prompt| recurring_prompt.create_prompt? }
+  end
+
+  def create_pending_recurring_prompts
+    pending_recurring_prompts
   end
 end
