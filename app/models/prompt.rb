@@ -1,6 +1,6 @@
 class Prompt < ApplicationRecord
   belongs_to :journal
-  belongs_to :recurring_prompt
+  belongs_to :recurring_prompt, optional: true
   has_many :entries
 
   def sibling_prompts
