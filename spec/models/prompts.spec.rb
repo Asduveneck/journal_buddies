@@ -45,7 +45,7 @@ RSpec.describe ::Entry, type: :model do
       let(:recurring_prompt) { build_stubbed(:recurring_prompt, prompts: other_sibling_prompts) }
 
       # TODO: WARNING!
-      # should technically contain the :prompt itself, but following passes because of stubs
+      # should technically contain the :prompt itself, but following passes (likely because of stubs)
       # Fix if time/priorities allow
       it { should contain_exactly( *other_sibling_prompts) }
     end
