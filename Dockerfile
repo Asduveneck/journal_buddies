@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:1
 FROM ruby:3.1
+# not sure about the ENV. Something from Bundler docs
+ENV GEM_HOME="/usr/local/bundle"
+ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
