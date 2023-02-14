@@ -5,7 +5,7 @@ class CreateRecurringPrompts < ActiveRecord::Migration[7.0]
       t.boolean :is_active
       t.boolean :is_time_important
       t.datetime :start_date
-      t.string :schedule_type, limit: 4
+      t.string :schedule_type, limit: 4, default: ""
       t.integer :schedule_interval
       t.references :journal, null: false, foreign_key: true
 
