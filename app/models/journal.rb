@@ -4,6 +4,8 @@ class Journal < ApplicationRecord
   has_many :journals_users
   has_many :users, through: :journals_users
 
+  validates :name, presence: true
+
   def pending_recurring_prompts
     @pending_recurring_prompts ||= recurring_prompts.filter { |recurring_prompt| recurring_prompt.create_prompt? }
   end

@@ -7,6 +7,11 @@ Rails.application.routes.draw do
 
   # Draft!
   namespace :api, defaults: {format: :json} do
+    devise_for :users
+    resources :users do
+      # resources :journals_users
+    end
+
     resources :journals
     resources :entries
     resources :prompts

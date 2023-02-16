@@ -1,6 +1,7 @@
 class Api::EntriesController < ApplicationController
   # pseudo code (env not fully configured)
   # do we need all the @?
+  # refactor based on journals
   def create
     @entry = Entry.new(permitted_params)
 

@@ -1,6 +1,6 @@
 class Api::PromptsController < ApplicationController
   # not sure if this will work.
-  # no routes, db, working yet
+  # refactor based on journals
   def create
     @prompt = Prompt.new(permitted_params)
 
