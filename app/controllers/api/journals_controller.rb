@@ -7,6 +7,7 @@ class Api::JournalsController < ApplicationController
 
     if @journal.save
       # Testing right now. Clean up / consolidate errors
+      # janky
       journals_user = JournalsUser.new(journal_id: @journal.id, user_id: current_user.id)
       journals_user.save
       render json: @journal, status: :ok
