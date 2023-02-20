@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_20_034145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,12 +33,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "journals_users", force: :cascade do |t|
-    t.bigint "journal_id", null: false
+  create_table "journals_users", id: false, force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.bigint "journal_id", null: false
     t.string "user_roles", default: [], array: true
-    t.index ["journal_id"], name: "index_journals_users_on_journal_id"
-    t.index ["user_id"], name: "index_journals_users_on_user_id"
   end
 
   create_table "prompts", force: :cascade do |t|
@@ -88,8 +86,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
 
   add_foreign_key "entries", "prompts"
   add_foreign_key "entries", "users"
-  add_foreign_key "journals_users", "journals"
-  add_foreign_key "journals_users", "users"
   add_foreign_key "prompts", "journals"
   add_foreign_key "prompts", "recurring_prompts"
   add_foreign_key "recurring_prompts", "journals"
