@@ -4,75 +4,76 @@ RSpec.describe Api::JournalsController, type: :request do
   include Devise::Test::IntegrationHelpers
   let(:user) { create(:user, first_name: 'John', last_name: 'Smith', password: 'password') }
   let(:journal_params) { {name: 'My journal', description: 'How am I?'} }
-  describe 'when not signed in' do
-    describe '#create' do
-      it 'returns unauthorized' do
-        post '/api/journals', :params => { journal: journal_params }
-        expect(response).to have_http_status(:unauthorized)
+  let(:request) { proc { return nil } }
+
+  RSpec.shared_examples 'an unauthorized endpoint' do
+    it 'returns unauthorized' do
+      request.call
+      expect(response).to have_http_status :unauthorized
+    end
+  end
+
+  describe '#create' do
+    let(:request) { proc { post '/api/journals', :params => { journal: journal_params } } }
+
+    describe 'when not signed in' do
+      it_behaves_like 'an unauthorized endpoint'
+    end
+
+    describe 'with invalid params' do
+      let(:journal_params) { {name: '', description: 'How am I?' } }
+      before(:each) { sign_in user; request.call }
+
+      it 'returns unprocessable' do
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 
-    describe '#show' do
-      let(:journal) { create(:journal, name: 'first journal') }
-      let(:journal_params) { nil }
+    describe 'with valid params' do
+      let(:journal_params) { {name: 'My journal', description: 'How am I?'} }
+      before(:each) { sign_in user; request.call }
 
-      it 'returns unauthorized' do
-        get "/api/journals/#{journal.id}"
-        expect(response).to have_http_status(:unauthorized)
+      it 'returns status okay' do
+        expect(response).to have_http_status :ok
+      end
+
+      it 'creates the journal and returns the data' do
+        expect(response.content_type).to eq 'application/json; charset=utf-8'
+        expect(response.body).to include journal_params[:name]
+        expect(response.body).to include journal_params[:description]
       end
     end
   end
 
-  describe 'when signed in' do
-    before(:each) do
-      sign_in user
+  describe '#show' do
+    let(:journal) { create(:journal, name: 'First journal') }
+    let(:journal_id) { nil }
+    let(:request) { proc { get "/api/journals/#{journal_id}" } }
+
+    describe 'when not signed in' do
+      let(:journal_id) { journal.id }
+      it_behaves_like 'an unauthorized endpoint'
     end
 
-    describe '#create' do
-      describe 'with invalid params' do
-        let(:journal_params) { {name: '', description: 'How am I?' } }
+    describe 'with an invalid / nonexistent journal' do
+      let(:journal_id) { 'bad_id' }
+      before(:each) { sign_in user; request.call }
 
-        it 'returns unprocessable' do
-          post '/api/journals', :params => { :journal => journal_params }
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
-      end
-
-      describe 'with valid params' do
-        it 'returns status okay' do
-          post '/api/journals', params: { :journal => journal_params }
-          expect(response).to have_http_status(:ok)
-        end
-
-        it 'creates the journal and returns the data' do
-          post '/api/journals', params: { :journal => journal_params }
-          expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response.body).to include(journal_params[:name])
-          expect(response.body).to include(journal_params[:description])
-        end
+      it 'returns status not found' do
+        expect(response).to have_http_status :not_found
       end
     end
 
-    describe '#show' do
-      let(:journal) { create(:journal, name: 'first journal') }
+    describe 'with a valid/existing journal' do
+      let(:journal_id) { journal.id }
+      before(:each) { sign_in user; request.call }
 
-      describe 'with an invalid / nonexistent journal' do
-        it 'returns status not found' do
-          get '/api/journals/bad_id'
-          expect(response).to have_http_status(:not_found)
-        end
+      it 'returns status okay' do
+        expect(response).to have_http_status :ok
       end
 
-      describe 'with a valid/existing journal' do
-        it 'returns status okay' do
-          get "/api/journals/#{journal.id}"
-          expect(response).to have_http_status(:ok)
-        end
-
-        it 'returns the journal json' do
-          get "/api/journals/#{journal.id}"
-          expect(response.body).to include(journal.to_json)
-        end
+      it 'returns the journal json' do
+        expect(response.body).to include journal.to_json
       end
     end
   end
