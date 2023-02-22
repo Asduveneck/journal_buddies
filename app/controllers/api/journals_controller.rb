@@ -17,7 +17,9 @@ class Api::JournalsController < ApplicationController
   end
 
   def show
-    render @journal.to_json
+    return unless @journal.present?
+
+    render json: @journal, status: :ok
   end
 
   def edit
@@ -48,6 +50,8 @@ class Api::JournalsController < ApplicationController
   end
 
   def set_journal
-    @journal = Journal.find(params[:id])
+    @journal = Journal.find_by(id: params[:id])
+    # raise ActiveRecord::RecordNotFound unless @journal # happens if just use .find
+    render(status: 404, inline: "Journal not found") unless @journal
   end
 end

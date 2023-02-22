@@ -11,6 +11,16 @@ RSpec.describe Api::JournalsController, type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    describe '#show' do
+      let(:journal) { create(:journal, name: 'first journal') }
+      let(:journal_params) { nil }
+
+      it 'returns unauthorized' do
+        get "/api/journals/#{journal.id}"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   describe 'when signed in' do
@@ -39,6 +49,29 @@ RSpec.describe Api::JournalsController, type: :request do
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(response.body).to include(journal_params[:name])
           expect(response.body).to include(journal_params[:description])
+        end
+      end
+    end
+
+    describe '#show' do
+      let(:journal) { create(:journal, name: 'first journal') }
+
+      describe 'with an invalid / nonexistent journal' do
+        it 'returns status not found' do
+          get '/api/journals/bad_id'
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      describe 'with a valid/existing journal' do
+        it 'returns status okay' do
+          get "/api/journals/#{journal.id}"
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'returns the journal json' do
+          get "/api/journals/#{journal.id}"
+          expect(response.body).to include(journal.to_json)
         end
       end
     end
