@@ -27,6 +27,8 @@ class Api::JournalsController < ApplicationController
 
   # update - only users with permitted roles should be able to update but for now...
   def update
+    return unless @journal.present?
+
     if @journal.update(journal_params)
       render json: @journal, status: :ok
     else
@@ -36,6 +38,8 @@ class Api::JournalsController < ApplicationController
 
   # safety checks needed
   def destroy
+    return unless @journal.present?
+
     @journal.destroy
   end
 
