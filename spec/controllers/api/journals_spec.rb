@@ -121,7 +121,6 @@ RSpec.describe Api::JournalsController, type: :request do
   end
 
   describe '#destroy' do
-  # may need to create journal each time...
     let(:journal) { create(:journal, name: 'First journal') }
     let(:journal_id) { nil }
     let(:request) { proc { delete "/api/journals/#{journal_id}" } }
@@ -137,9 +136,22 @@ RSpec.describe Api::JournalsController, type: :request do
     end
 
     describe 'with a valid journal id' do
-      # let(:journal) { create(:journal, name: 'First journal') }
-      let(:journal_id) { journal.id }
-      it_behaves_like 'an existing journal'
+      let!(:journal) { create(:journal, name: 'First journal') }
+      let!(:journal_id) { journal.id }
+      before(:each) { sign_in user }
+
+      it 'returns status okay' do
+        request.call
+        expect(response).to have_http_status :ok
+      end
+
+      it 'deletes the journal' do
+        request.call
+        expect(response).to have_http_status :ok
+        sign_in user
+        get "/api/journals/#{journal_id}"
+        expect(response).to have_http_status :not_found
+      end
     end
   end
 end

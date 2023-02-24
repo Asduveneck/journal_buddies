@@ -32,7 +32,7 @@ class Api::JournalsController < ApplicationController
     if @journal.update(journal_params)
       render json: @journal, status: :ok
     else
-      render json: @json.errors.full_messages, status: :unprocessable_entity
+      render json: @journal.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -40,7 +40,13 @@ class Api::JournalsController < ApplicationController
   def destroy
     return unless @journal.present?
 
-    @journal.destroy
+    destroyed_journal = @journal.destroy
+
+    if destroyed_journal.destroyed?
+      render json: destroyed_journal, status: :ok
+    else
+      render json: destroyed_journal.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   private
