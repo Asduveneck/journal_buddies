@@ -1,37 +1,36 @@
 class Api::PromptsController < ApplicationController
-  # not sure if this will work.
-  # refactor based on journals
-  def create
-    @prompt = Prompt.new(permitted_params)
-
-    if @prompt.save
-      render @prompt.to_json
-    else
-      render json: @prompt.errors.full_messages, status :unprocessable_entity
-    end
-  end
+  before_action :authenticate_user!
+  before_action :set_prompt, only: %i[ show update destroy ]
+  before_action :set_journal, only: %i[ create ]
 
   def show
-    render prompt.to_json if prompt
+    render json: @prompt
+  end
+
+  def create
+    @prompt = Prompt.new(permitted_params)
+    @prompt.journal = @journal
+
+    if @prompt.save
+      render json: @prompt, status: :created, location: @prompt
+    else
+      render json: @prompt.errors, status: :unprocessable_entity
+    end
   end
 
   # For now, update/destroy only if prompt has no response
   def update
-    render_has_entries_error and return if @prompt.entries.present?
+    render_uneditable_error and return unless @prompt.editable
 
-    render_uneditable_error and return unless editable?
-
-    if prompt.update_attributes(editable_params)
-      render prompt.to_json
+    if @prompt.update(permitted_params)
+      render json: @prompt
     else
-      render json: @prompt.errors
+      render json: @prompt.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    render_has_entries_error and return if @prompt.entries.present?
-
-    prompt.destroy
-    render json: prompt.to_json
+    @prompt.destroy
   end
 
   private
@@ -45,6 +44,7 @@ class Api::PromptsController < ApplicationController
     )
   end
 
+  # ?
   def editable_params
     params.require(:prompt).permit(
       :title,
@@ -53,12 +53,12 @@ class Api::PromptsController < ApplicationController
     )
   end
 
-  def prompt
-    @prompt = prompt.find(params[:id])
+  def set_prompt
+    @prompt = Prompt.find(params[:id])
   end
 
-  def render_has_entries_error
-    render status :unprocessable_entity, json: { error: "Prompt has entries" }
+  def set_journal
+    @journal = Journal.find(params[:journal_id])
   end
 
   def editable?
@@ -66,5 +66,7 @@ class Api::PromptsController < ApplicationController
   end
 
   def render_uneditable_error
-    render status :unprocessable_entity, kjon: { error: "Prompt is uneditable" }
+    render status :unprocessable_entity, json: { error: "Prompt is uneditable" }
+  end
+
 end

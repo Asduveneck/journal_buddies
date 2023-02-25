@@ -10,10 +10,23 @@ Rails.application.routes.draw do
     devise_for :users
     resources :users do
       # resources :journals_users
+      # resources journals? index, get, destroy...?
     end
 
-    resources :journals
-    resources :entries
+    # make sure to not have a general journals index
+    resources :journals do
+      resources :prompts
+      resources :recurring_prompts
+    end
+
+    resources :recurring_prompts do
+      resources :prompts
+    end
+
+    resources :prompts do
+      resources :entries
+    end
+
     resources :prompts
   end
 end
