@@ -12,7 +12,7 @@ class Api::PromptsController < ApplicationController
     @prompt.journal = @journal
 
     if @prompt.save
-      render json: @prompt, status: :created, location: @prompt
+      render json: @prompt, status: :created #, location: @prompt
     else
       render json: @prompt.errors, status: :unprocessable_entity
     end
