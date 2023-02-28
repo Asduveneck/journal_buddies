@@ -50,8 +50,8 @@ RSpec.describe Api::JournalsController, type: :request do
       let(:journal_params) { {name: 'My journal', description: 'How am I?'} }
       before(:each) { sign_in user; request.call }
 
-      it 'returns status okay' do
-        expect(response).to have_http_status :ok
+      it 'returns status created' do
+        expect(response).to have_http_status :created
       end
 
       it 'creates the journal and returns the data' do

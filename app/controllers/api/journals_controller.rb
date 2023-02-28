@@ -10,7 +10,7 @@ class Api::JournalsController < ApplicationController
       # janky
       journals_user = JournalsUser.new(journal_id: @journal.id, user_id: current_user.id)
       journals_user.save
-      render json: @journal, status: :ok
+      render json: @journal, status: :created
     else
       render json: @journal.errors.full_messages, status: :unprocessable_entity
     end
