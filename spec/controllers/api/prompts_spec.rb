@@ -114,9 +114,9 @@ RSpec.describe Api::PromptsController, type: :request do
         it 'creates the prompt and returns the data' do
           post path, params: valid_params
 
-          expect(response).to include :editable
-          expect(response).to include :title
-          expect(response).to include :scheduled_date
+          expect(response.body).to include "#{valid_params[:prompt][:editable]}"
+          expect(response.body).to include "#{valid_params[:prompt][:title]}"
+          expect(response.body).to include "#{valid_params[:prompt][:scheduled_date]}"
         end
       end
     end
