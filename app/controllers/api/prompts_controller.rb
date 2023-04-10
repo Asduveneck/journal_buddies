@@ -8,6 +8,8 @@ class Api::PromptsController < ApplicationController
   end
 
   def create
+    return unless @journal
+
     @prompt = Prompt.new(permitted_params)
     @prompt.journal = @journal
 
@@ -54,11 +56,12 @@ class Api::PromptsController < ApplicationController
   end
 
   def set_prompt
-    @prompt = Prompt.find(params[:id])
+    @prompt = Prompt.find_by(params[:id])
   end
 
   def set_journal
-    @journal = Journal.find(params[:journal_id])
+    @journal = Journal.find_by(id: params[:journal_id])
+    render(status: 404, inline: "Journal not found") unless @journal
   end
 
   def editable?
