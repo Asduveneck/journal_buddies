@@ -9,7 +9,7 @@ RSpec.describe Api::PromptsController, type: :request do
   let(:journal) {
     create(:journal, name: 'My journal', description: 'How am I?')
   }
-  let(:prompt) { nil }
+  let(:prompt) { create(:prompt, title: 'How are you?', journal_id: journal) }
 
   let(:title) { nil}
   let(:editable) { nil}
@@ -32,22 +32,21 @@ RSpec.describe Api::PromptsController, type: :request do
   RSpec.shared_examples 'a nonexistent journal' do
     before(:each) { sign_in user; request.call }
 
-    it { should have_http_status :not_found }
-    it { is_expected.to respond_with :not_found }
-    it { should contain "Journal not found" }
-
-    # it 'returns Journal not found' do
-    #   expect(response).to have_http_status :not_found
-    # end
-
-    # it 'returns Journal not found' do
-    #   expect(response).to have_http_status :not_found
-    # end
+    it 'returns status not found' do
+      expect(response).to have_http_status :not_found
+    end
   end
 
   describe '#show' do
+    let(:request) { proc { get path, params: valid_params } }
+    let(:path) { "/api/journals/#{journal_id}/prompts/#{prompt.id}" }
+
     describe 'with a nonexistent journal'  do
-      it 'returns not found' do end
+      let(:journal_id) { 'bad' }
+      let(:path) { "/api/journals/#{journal_id}/prompts/#{prompt.id}" }
+
+      # it doesn't/ What behavior do I want here?
+      # it_behaves_like 'a nonexistent journal'
     end
     describe 'with a valid journal' do
       describe 'when unauthorized'
@@ -73,17 +72,22 @@ RSpec.describe Api::PromptsController, type: :request do
 
 
   describe '#create' do
+    # what if I explicitly state the journal and path,
+    # or try using a proc below here and see if that makes it fail?
     let(:journal_id) { 'bad' }
     let(:path) { "/api/journals/#{journal_id}/prompts" }
 
+    let(:request) { proc { post path, params: valid_params } }
+
     describe 'with a nonexistent journal' do
-      before(:each) { sign_in user }
+      it_behaves_like 'a nonexistent journal'
 
-      it 'should return not found' do
-        post path, params: valid_params
+      # below passes
+      # it 'should return not found' do
+      #   post path, params: valid_params
 
-        expect(response).to have_http_status :not_found
-      end
+      #   expect(response).to have_http_status :not_found
+      # end
     end
 
     describe 'with a valid journal' do
@@ -96,7 +100,15 @@ RSpec.describe Api::PromptsController, type: :request do
         end
       end
       
-      # describe 'with invalid params' do end
+      # NA for now. Needs recurring prompt next; title should be required when no recurring prompt
+      # describe 'with invalid params' do
+      #   let(:title) { '' }
+      #   before(:each) { sign_in user }
+
+      #   it 'returns unprocessable' do
+      #     expect(response).to have_http_status :unprocessable_entity
+      #   end
+      # end
 
       describe 'with valid params' do
         let(:title) { 'How was your week?' }
