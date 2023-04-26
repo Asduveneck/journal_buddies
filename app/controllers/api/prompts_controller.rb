@@ -1,10 +1,10 @@
 class Api::PromptsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_journal, only: %i[ create show update ]
   before_action :set_prompt, only: %i[ show update destroy ]
-  before_action :set_journal, only: %i[ create ]
 
   def show
-    render json: @prompt
+    render json: @prompt 
   end
 
   def create
@@ -22,7 +22,10 @@ class Api::PromptsController < ApplicationController
 
   # For now, update/destroy only if prompt has no response
   def update
-    render_uneditable_error and return unless @prompt.editable
+    # the render should happen in the set_prompt / set_journal
+    render_not_found('Journal') and return unless @journal
+    render_not_found('Prompt') and return unless @prompt
+    render_uneditable_error and return unless (@prompt.editable || editable_params[:editable] )
 
     if @prompt.update(permitted_params)
       render json: @prompt
@@ -56,12 +59,13 @@ class Api::PromptsController < ApplicationController
   end
 
   def set_prompt
-    @prompt = Prompt.find_by(params[:id])
+    @prompt = Prompt.find_by(id: params[:id])
+    render_not_found('Prompt') unless @prompt
   end
 
   def set_journal
     @journal = Journal.find_by(id: params[:journal_id])
-    render(status: 404, inline: "Journal not found") unless @journal
+    render_not_found('Journal') unless @journal
   end
 
   def editable?
@@ -69,7 +73,10 @@ class Api::PromptsController < ApplicationController
   end
 
   def render_uneditable_error
-    render status :unprocessable_entity, json: { error: "Prompt is uneditable" }
+    render json: { error: 'Prompt is uneditable' }, status: :unprocessable_entity
   end
 
+  def render_not_found(entity_name)
+    render json: { error: "#{entity_name} not found" }, status: :not_found
+  end
 end

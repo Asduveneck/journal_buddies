@@ -1,6 +1,6 @@
 class Api::JournalsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_journal, only: [:show, :edit, :update, :destroy]
+  before_action :set_journal, only: %i[ show edit update destroy ]
 
   def create
     @journal = Journal.new(journal_params)
@@ -62,6 +62,6 @@ class Api::JournalsController < ApplicationController
   def set_journal
     @journal = Journal.find_by(id: params[:id])
     # raise ActiveRecord::RecordNotFound unless @journal # happens if just use .find
-    render(status: 404, inline: "Journal not found") unless @journal
+    render(status: 404, inline: 'Journal not found') unless @journal
   end
 end
