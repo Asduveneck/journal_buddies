@@ -174,7 +174,51 @@ RSpec.describe Api::PromptsController, type: :request do
     end
   end
 
-  # describe '#destroy'
+  describe '#destroy' do
+    let(:path) { "/api/journals/#{journal_id}/prompts/#{prompt_id}" }
+    let(:request) { proc { delete path } }
+
+    describe 'when unauthorized' do
+      it_behaves_like 'an authorized endpoint'
+    end
+
+    describe 'with a nonexistent journal' do
+      let(:journal_id) { 'bad' }
+      it_behaves_like 'a nonexistent journal'
+    end
+
+    describe 'with a valid journal' do
+      describe 'with a nonexistent prompt ID' do
+        let(:prompt_id) { 'bad' }
+        it_behaves_like 'a nonexistent prompt'
+      end
+
+      describe 'with a valid prompt' do
+        before(:each) { sign_in user }
+
+        it 'returns status okay' do
+          get path
+          expect(response).to have_http_status :ok
+          sign_in user
+          request.call
+          puts response.body
+          expect(response).to have_http_status :ok
+        end
+
+        it 'deletes the prompt' do
+          get path
+          expect(response).to have_http_status :ok
+          expect(response.body).to include prompt.title
+          sign_in user
+          request.call
+
+          sign_in user
+          get path
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+  end
 
   # TODO: handle recurring prompts for title
   describe '#create' do

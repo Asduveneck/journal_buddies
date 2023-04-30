@@ -1,6 +1,6 @@
 class Api::PromptsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_journal, only: %i[ create show update ]
+  before_action :set_journal, only: %i[ create show update destroy ]
   before_action :set_prompt, only: %i[ show update destroy ]
 
   def show
@@ -35,7 +35,16 @@ class Api::PromptsController < ApplicationController
   end
 
   def destroy
-    @prompt.destroy
+    render_not_found('Journal') and return unless @journal
+    render_not_found('Prompt') and return unless @prompt
+
+    destroyed_prompt = @prompt.destroy
+
+    if destroyed_prompt.destroyed?
+      render json: destroyed_prompt, status: :ok
+    else
+      render json: destroyed_prompt.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   private
