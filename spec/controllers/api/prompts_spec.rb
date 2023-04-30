@@ -152,18 +152,19 @@ RSpec.describe Api::PromptsController, type: :request do
           end
         end
 
+        # it behaves_like successfully updates the prompt
         describe 'when explicitly updating the prompt to be editable' do
           let(:title) { 'New prompt' }
           let(:editable) { true }
           before(:each) { sign_in user; request.call }
 
-          it 'renders unprocessable entity' do
+          it 'renders http status success' do
             expect(response).to have_http_status :ok
           end
 
-          it 'returns a message stating the prompt is uneditable' do
+          it 'returns the prompt' do
             expect(response.body).to include title
-          end
+          end1
 
           it 'updates the prompt' do
             prompt.reload

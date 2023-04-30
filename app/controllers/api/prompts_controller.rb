@@ -3,6 +3,7 @@ class Api::PromptsController < ApplicationController
   before_action :set_journal, only: %i[ create show update destroy ]
   before_action :set_prompt, only: %i[ show update destroy ]
 
+  # TODO: who should be able to see? journals users?
   def show
     render json: @prompt 
   end
