@@ -28,7 +28,6 @@ RSpec.describe Api::PromptsController, type: :request do
 
   let(:path) { nil }
   let(:request) { proc { return nil } }
-  # subject { response }
 
   RSpec.shared_examples 'an authorized endpoint' do
     it 'returns unauthorized' do

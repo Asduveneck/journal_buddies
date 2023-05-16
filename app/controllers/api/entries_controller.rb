@@ -3,7 +3,6 @@ class Api::EntriesController < ApplicationController
   before_action :set_prompt, only: %i[ create show update destroy ]
   before_action :set_entry, only: %i[ show update destroy ]
 
-
   # TODO: who can see the entries? journal users only?
   # going to start simpler then update for journals users
   def show

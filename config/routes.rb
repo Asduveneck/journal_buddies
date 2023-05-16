@@ -8,10 +8,7 @@ Rails.application.routes.draw do
   # Draft!
   namespace :api, defaults: {format: :json} do
     devise_for :users
-    resources :users do
-      # resources :journals_users
-      # resources journals? index, get, destroy...?
-    end
+    resources :users
 
     # make sure to not have a general journals index
     resources :journals do
