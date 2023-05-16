@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_20_034145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "entries", force: :cascade do |t|
-    t.text "text_content"
+    t.text "text_content", default: ""
     t.boolean "editable"
     t.bigint "prompt_id", null: false
     t.bigint "user_id", null: false
@@ -26,18 +26,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
   end
 
   create_table "journals", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
+    t.string "name", default: "", null: false
+    t.text "description", default: ""
+    t.string "visibility", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "journals_users", force: :cascade do |t|
-    t.bigint "journal_id", null: false
+  create_table "journals_users", id: false, force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.bigint "journal_id", null: false
     t.string "user_roles", default: [], array: true
-    t.index ["journal_id"], name: "index_journals_users_on_journal_id"
-    t.index ["user_id"], name: "index_journals_users_on_user_id"
   end
 
   create_table "prompts", force: :cascade do |t|
@@ -57,7 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
     t.boolean "is_active"
     t.boolean "is_time_important"
     t.datetime "start_date"
-    t.string "schedule_type", limit: 4
+    t.string "schedule_type", limit: 4, default: ""
     t.integer "schedule_interval"
     t.bigint "journal_id", null: false
     t.datetime "created_at", null: false
@@ -66,19 +65,27 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_065106) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "first_name", null: false
-    t.string "last_name", null: false
-    t.string "user_name"
-    t.string "email", null: false
+    t.string "first_name", default: "", null: false
+    t.string "last_name", default: "", null: false
+    t.string "user_name", default: "", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "entries", "prompts"
   add_foreign_key "entries", "users"
-  add_foreign_key "journals_users", "journals"
-  add_foreign_key "journals_users", "users"
   add_foreign_key "prompts", "journals"
   add_foreign_key "prompts", "recurring_prompts"
   add_foreign_key "recurring_prompts", "journals"

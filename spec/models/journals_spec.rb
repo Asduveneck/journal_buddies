@@ -7,8 +7,14 @@ RSpec.describe ::Journal, type: :model do
   subject(:journal) { build_stubbed(:journal, name: name, description: description, recurring_prompts: recurring_prompts) }
 
   describe 'initialization' do
-    describe 'without a name or description' do
+    describe 'without a description' do
+      let(:name) { 'My journal' }
       it { should be_valid }
+    end
+
+    describe 'without a name' do
+      let(:description) { 'My thoughts' }
+      it { should_not be_valid }
     end
   end
 

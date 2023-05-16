@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+# TODO: Use gem shoulda: https://github.com/thoughtbot/shoulda-matchers
+# to clean up all these associations
 RSpec.describe ::Entry, type: :model do
   describe 'initialization' do
     let(:params) { nil }
