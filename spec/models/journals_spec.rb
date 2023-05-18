@@ -6,6 +6,17 @@ RSpec.describe ::Journal, type: :model do
   let(:recurring_prompts) { [] }
   subject(:journal) { build_stubbed(:journal, name: name, description: description, recurring_prompts: recurring_prompts) }
 
+  describe 'associations' do
+    it { should have_many :prompts }
+    it { should have_many :recurring_prompts }
+    it { should have_many :journals_users }
+    it { should have_many :users }
+  end
+
+  describe 'validations' do
+    it { should validate_presence_of :name }
+  end
+
   describe 'initialization' do
     describe 'without a description' do
       let(:name) { 'My journal' }
