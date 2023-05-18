@@ -1,6 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe ::Entry, type: :model do
+RSpec.describe ::Prompt, type: :model do
+  describe 'associations' do
+    it { should belong_to :journal }
+    # it { should belong_to :recurring_prompt } # prompts won't always belong to recurring prompt
+    it { should have_many :entries }
+  end
+
   describe 'initialization' do
     let(:params) { nil }
     let(:journal) { nil }

@@ -3,6 +3,19 @@ require 'rails_helper'
 # TODO: Use gem shoulda: https://github.com/thoughtbot/shoulda-matchers
 # to clean up all these associations
 RSpec.describe ::Entry, type: :model do
+  describe 'associations' do
+    it { should belong_to :prompt }
+    it { should belong_to :user }
+    it { should have_one :journal }
+    it { should have_many :journals_users }
+  end
+
+  describe 'validations' do
+    it { should validate_presence_of :text_content }
+    it { should validate_presence_of :user_id }
+    it { should validate_presence_of :prompt_id }
+  end
+
   describe 'initialization' do
     let(:params) { nil }
 
