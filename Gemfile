@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.3"
+ruby "3.1.4"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4"
@@ -51,6 +51,7 @@ end
 
 group :test do
   gem "timecop", "~> 0.9.6"
+  gem 'shoulda-matchers', '~> 5.0'
 end
 
 gem "rspec-rails", group: [:development, :test]
