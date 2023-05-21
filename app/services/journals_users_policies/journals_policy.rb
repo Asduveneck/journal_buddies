@@ -3,9 +3,9 @@
 # a journal can only be deleted/edited by an admin for that journal
 
 # TODOS:
-# 1. simplify the user_role to be a string / enum
-# 2. make the visibility to be a boolean. Visible or private.
-# 3. helper for user_role == 'admin' haha.
+# [x] 1. simplify the user_role to be a string / enum 
+# [ ] 2. make the visibility to be a boolean. Visible or private.
+# [ ] 3. helper for user_role == 'admin' haha.
 
 class JournalsPolicy
   def initialize(journal, user, journals_users)
