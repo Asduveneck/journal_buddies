@@ -1,24 +1,24 @@
-# README
+# Journal Buddies
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Local setup
 
-Things you may want to cover:
+This project requires docker compose, and to initialize the database:
 
-* Ruby version
+```sh
+docker compose run web bin/rails db:create
+docker compose run web bin/rails db:migrate
+```
 
-* System dependencies
+Afterwards, starting the backend is as simple as
 
-* Configuration
+```sh
+docker compose up
+```
 
-* Database creation
+RSpec tests can be run via
 
-* Database initialization
+```sh
+docker compose run web bundle exec rspec $OPTIONAL_FILE_PATH
+```
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Some useful snippets to abbreviate these commands are located within [bin/run_docker_shortcuts.sh](bin/run_docker_shortcuts.sh). 
