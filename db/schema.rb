@@ -14,6 +14,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_034145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "user_role", ["admin", "prompt_writer", "participant", "viewer"]
+
   create_table "entries", force: :cascade do |t|
     t.text "text_content", default: ""
     t.boolean "editable"
@@ -28,7 +32,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_034145) do
   create_table "journals", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.text "description", default: ""
-    t.string "visibility", default: ""
+    t.boolean "private_read", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -36,7 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_034145) do
   create_table "journals_users", id: false, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "journal_id", null: false
-    t.string "user_roles", default: [], array: true
+    t.enum "user_role", default: "participant", null: false, enum_type: "user_role"
   end
 
   create_table "prompts", force: :cascade do |t|
