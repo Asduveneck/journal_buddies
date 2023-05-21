@@ -4,7 +4,7 @@
 
 # TODOS:
 # [x] 1. simplify the user_role to be a string / enum 
-# [ ] 2. make the visibility to be a boolean. Visible or private.
+# [x] 2. make the visibility to be a boolean. Visible or private.
 # [ ] 3. helper for user_role == 'admin' haha.
 
 class JournalsPolicy
