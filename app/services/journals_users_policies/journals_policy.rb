@@ -23,17 +23,17 @@ class JournalsPolicy
   def delete?
     return false unless user_in_journals_users?
 
-    return user_role == 'admin'
+    return admin_user_role?
   end
 
   def edit?
     return false unless user_in_journals_users?
 
-    return user_role == 'admin'
+    return admin_user_role?
   end
 
   def add_user?
-    return user_role == 'admin'
+    return admin_user_role?
   end
 
   private
@@ -48,5 +48,9 @@ class JournalsPolicy
 
   def user_role
     @user_role ||= @journal_user&.role || ''
+  end
+
+  def admin_user_role?
+    @user_role == 'admin'
   end
 end
