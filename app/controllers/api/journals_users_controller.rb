@@ -10,14 +10,11 @@ class Api::JournalsUsersController < ApplicationController
     return unless @journal.present?
   end
 
-
-  # update - only users with permitted roles should be able to update but for now...
   def update
     return unless @journal.present?
 
   end
 
-  # safety checks needed
   def destroy
     return unless @journal.present?
 
