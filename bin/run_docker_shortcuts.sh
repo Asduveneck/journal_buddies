@@ -19,7 +19,7 @@ case $COMMAND in
   ;;
 
   rails-console | r-c )
-    docker compose run web bin/rails console
+    docker compose run --rm web bin/rails console
   ;;
 
   rspec )
