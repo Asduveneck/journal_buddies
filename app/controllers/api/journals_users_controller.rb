@@ -45,12 +45,26 @@ class Api::JournalsUsersController < ApplicationController
 
     # redo to render update
     # issue is the JournalsUser is a join table with no primary key
-    JournalsUser.update(grouped_journals_users.keys, grouped_journals_users.values)
+    # JournalsUser.update(grouped_journals_users.keys, grouped_journals_users.values)
+
+    @journals_users = JournalsUser.where(journal_id: @journal.id).where(user_id: users.pluck(:user_id))
+    # multiple queries to the db for now
+
+    # works fiurst loop, buyt fails second time! output sql is wrong...
+    users.each do |user|
+      journal_user = @journals_users.find { |j| j.user_id == user[:user_id] }
+      journal_user.update(user_role: user[:user_role])
+    end
+
+    # then
   end
 
   # TODO: find the journal users in the parameter
   def destroy
     return unless @journal.present?
+
+    @journals_users = JournalsUser.where(journal_id: @journal.id).where(user_id: users.pluck(:user_id))
+    @journals_users.delete
 
   end
 
