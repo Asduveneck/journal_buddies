@@ -37,10 +37,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_034145) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "journals_users", id: false, force: :cascade do |t|
+  create_table "journals_users", id: :serial, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "journal_id", null: false
     t.enum "user_role", default: "participant", null: false, enum_type: "user_role"
+    t.index ["id"], name: "index_journals_users_on_id"
+    t.index ["journal_id"], name: "index_journals_users_on_journal_id"
+    t.index ["user_id", "journal_id"], name: "index_journals_users_on_user_id_and_journal_id", unique: true
+    t.index ["user_id"], name: "index_journals_users_on_user_id"
   end
 
   create_table "prompts", force: :cascade do |t|
