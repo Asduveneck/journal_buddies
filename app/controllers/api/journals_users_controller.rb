@@ -1,6 +1,6 @@
 class Api::JournalsUsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_journal, only: %i[ show edit create update destroy ]
+  before_action :set_journal, only: %i[ index edit create update destroy ]
 
   # Bulk action to create one or multiple users
   # below should hopefully work
@@ -28,8 +28,7 @@ class Api::JournalsUsersController < ApplicationController
     end
   end
 
-  # TODO: isn't this more of an index?!?
-  def show
+  def index
     return unless @journal.present?
 
     render json: @journal.journals_users
