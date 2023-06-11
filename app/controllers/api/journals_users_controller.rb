@@ -25,7 +25,7 @@ class Api::JournalsUsersController < ApplicationController
       }
     end
 
-    render json: @kournals_users
+    render json: @journals_users
   end
 
   def show
@@ -38,32 +38,32 @@ class Api::JournalsUsersController < ApplicationController
   def update
     return unless @journal.present?
 
-    journals_user_attributes = users.map do |user|
-      { user_id: user.user_id, journal_id: @journal.id, user_role: user.role }
-    end
-    grouped_journals_users = journals_user_attributes.index_by { |user| user[:user_id] }
-
-    # redo to render update
-    # issue is the JournalsUser is a join table with no primary key
-    # JournalsUser.update(grouped_journals_users.keys, grouped_journals_users.values)
-
-    @journals_users = JournalsUser.where(journal_id: @journal.id).where(user_id: users.pluck(:user_id))
-    # multiple queries to the db for now
-
-    # works fiurst loop, buyt fails second time! output sql is wrong...
-    users.each do |user|
-      journal_user = @journals_users.find { |j| j.user_id == user[:user_id] }
-      journal_user.update(user_role: user[:user_role])
+    grouped_journals_users = {}
+    users.map do |user|
+      grouped_journals_users[user.journal_user_id] = { user_role: user.role }
     end
 
-    # then
+    begin
+      JournalsUser.transaction do
+        @journals_users = JournalsUser.update(grouped_journals_users.keys, grouped_journals_users.values)
+      end
+    rescue => exception
+      @journals_users = {
+        error: {
+          status: :unprocessable_entity,
+          message: exception
+        }
+      }
+    end
+
+    render json: @journals_users
   end
 
   # TODO: find the journal users in the parameter
   def destroy
     return unless @journal.present?
 
-    @journals_users = JournalsUser.where(journal_id: @journal.id).where(user_id: users.pluck(:user_id))
+    @journals_users = JournalsUser.where(journal_id: @journal.id).where(id: users.pluck(:journal_user_id))
     @journals_users.delete
 
   end
@@ -73,7 +73,7 @@ class Api::JournalsUsersController < ApplicationController
   def journal_params
     params.require(:journal).permit(
       :name,
-      users: %i[user_id, role],
+      users: %i[user_id, role, journal_user_id],
     )
   end
 
