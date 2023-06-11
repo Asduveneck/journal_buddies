@@ -5,7 +5,10 @@
 # TODOS:
 # [x] 1. simplify the user_role to be a string / enum 
 # [x] 2. make the visibility to be a boolean. Visible or private.
-# [ ] 3. helper for user_role == 'admin' haha.
+# [x] 3. helper for user_role == 'admin' haha.
+# [ ] 4. Replace the string with a constant from the model... (here and elsewhere)
+# [ ] 5. Double check these policies and roles...
+
 
 class JournalsPolicy
   def initialize(journal, user, journals_users)
