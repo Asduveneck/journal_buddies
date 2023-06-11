@@ -34,7 +34,6 @@ class Api::JournalsUsersController < ApplicationController
     render json: @journal.journals_users
   end
 
-  # TODO: find the journal users in the parameter
   def update
     return unless @journal.present?
 
@@ -59,7 +58,6 @@ class Api::JournalsUsersController < ApplicationController
     render json: @journals_users
   end
 
-  # TODO: find the journal users in the parameter
   def destroy
     return unless @journal.present?
 
