@@ -18,6 +18,7 @@ class JournalsUsersPolicy
   end
 
   def create?
+    # what if the journal is brand new? That means there are NO journal users, and therefore no admin
     return admin_user_role?
   end
 
