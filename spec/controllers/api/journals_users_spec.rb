@@ -3,7 +3,7 @@ require 'rails_helper'
 # Warning: going to be very lightweight as all the controllers will need updates for policies
 # or will be assumed to have correct policies...
 
-RSpec.describe Api::JournalsController, type: :request do
+RSpec.describe Api::JournalsUsersController, type: :request do
   include Devise::Test::IntegrationHelpers
   let(:user) { create(:user, first_name: 'John', last_name: 'Conner', email: 'jconner@gmail.com', password: 'password') }
   let(:user_two) { create(:user, first_name: 'Sarah', last_name: 'Snow', email: 'ssnow@gmail.com', password: 'password') }
