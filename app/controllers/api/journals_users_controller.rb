@@ -9,13 +9,14 @@ class Api::JournalsUsersController < ApplicationController
     return unless users.present?
 
     journals_user_attributes = users.map do |user|
-      { user_id: user.user_id, journal_id: @journal.id, user_role: user.role }
+      { user_id: user[:user_id], journal_id: @journal.id, user_role: user[:role] }
     end
 
     begin
       JournalsUser.transaction do
         @journals_users = JournalsUser.create! journals_user_attributes
       end
+      render json: @journals_users, status: :created
     rescue => exception
       @journals_users = {
         error: {
@@ -23,11 +24,11 @@ class Api::JournalsUsersController < ApplicationController
           message: exception
         }
       }
+      render json: @journals_users, status: :unprocessable_entity
     end
-
-    render json: @journals_users
   end
 
+  # TODO: isn't this more of an index?!?
   def show
     return unless @journal.present?
 
@@ -76,9 +77,9 @@ class Api::JournalsUsersController < ApplicationController
   end
 
   def set_journal
-    @journal = Journal.find_by(id: params[:id])
+    @journal = Journal.find_by(id: params[:journal_id])
     # raise ActiveRecord::RecordNotFound unless @journal # happens if just use .find
-    render(status: 404, inline: 'Journal not found') unless @journal
+    render json: { error: 'Journal not found' }, status: :not_found unless @journal
   end
 
   def users

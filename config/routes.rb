@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       resources :recurring_prompts
       # bulk actions on journals_users
       get 'journals_users', to: 'journals_users#show'
-      post 'journals_users', to: 'journals_users#new'
+      post 'journals_users', to: 'journals_users#create'
       patch 'journals_users', to: 'journals_users#update'
       delete 'journals_users', to: 'journals_users#destroy'
     end
