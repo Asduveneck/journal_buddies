@@ -39,13 +39,14 @@ class Api::JournalsUsersController < ApplicationController
 
     grouped_journals_users = {}
     users.map do |user|
-      grouped_journals_users[user.journal_user_id] = { user_role: user.role }
+      grouped_journals_users[user[:journal_user_id]] = { user_role: user[:role] }
     end
 
     begin
       JournalsUser.transaction do
         @journals_users = JournalsUser.update(grouped_journals_users.keys, grouped_journals_users.values)
       end
+      render json: @journals_users, status: :ok
     rescue => exception
       @journals_users = {
         error: {
@@ -53,21 +54,26 @@ class Api::JournalsUsersController < ApplicationController
           message: exception
         }
       }
+      render json: @journals_users, status: :unprocessable_entity
     end
-
-    render json: @journals_users
   end
 
   def destroy
     return unless @journal.present?
 
-    @journals_users = JournalsUser.where(journal_id: @journal.id).where(id: users.pluck(:journal_user_id))
-    @journals_users.delete
+    @journals_users = JournalsUser.where(journal_id: @journal.id).where(id: users.pluck(:journal_user_id)).destroy
+
+    if @journals_users.destroyed?
+      render json: @journals_users, status: :ok
+    else
+      render json: @journals_users.errors.full_messages, status: :unprocessable_entity
+    end
 
   end
 
   private
   
+  # TODO: these params need to be further restricted depending on the method
   def journal_params
     params.require(:journal).permit(
       :name,

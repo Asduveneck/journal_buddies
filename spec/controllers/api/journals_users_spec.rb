@@ -1,5 +1,8 @@
 require 'rails_helper'
 
+# TODO:
+# unhappy edge cases are put off for now since we will implement policies soon
+# and probably will need to set up Faker and more FactoryBot Factories to eliminate some cruft here
 # Warning: going to be very lightweight as all the controllers will need updates for policies
 # or will be assumed to have correct policies...
 
@@ -58,9 +61,7 @@ RSpec.describe Api::JournalsUsersController, type: :request do
       end
     end
 
-    # TODO:
-    # unhappy edge cases are put off for now since we will implement policies soon
-    # and probably will need to set up Faker and more FactoryBot Factories to eliminate some cruft here
+    # TODO: invalid user role test?
   end
 
   describe '#index' do
@@ -89,6 +90,83 @@ RSpec.describe Api::JournalsUsersController, type: :request do
 
       it 'returns the journal users json' do
         expect(response.body).to include journals_users.to_json
+      end
+    end
+  end
+
+  describe '#update' do
+    let(:journal_id) { journal.id }
+    let(:journal_user) { create(:journals_user, :as_admin, user_id: user.id, journal_id: journal.id) }
+    let(:journal_user_two ) { create(:journals_user, :as_participant, user_id: user_two.id, journal_id: journal.id) }
+    let(:journals_users_params) { [] }
+
+    let(:request) { proc { patch "/api/journals/#{journal_id}/journals_users", params: { users: journals_users_params } } }
+
+    describe 'when not signed in' do
+      let(:journal_id) { journal.id }
+      it_behaves_like 'an unauthorized endpoint'
+    end
+
+    describe 'with an invalid journal ID' do
+      let(:journal_id) { 'bad_id' }
+      it_behaves_like 'a nonexistent journal'
+    end
+
+    # TODO: test response when invalid role given
+    describe 'with a valid journal' do
+      describe 'and with all valid new roles' do
+        let(:journals_users_params) do
+          [
+            {journal_user_id: journal_user.id, role: 'viewer'},
+            {journal_user_id: journal_user_two.id, role: 'viewer'},
+          ]
+        end
+
+        before(:each) { sign_in user; request.call }
+
+        it 'returns ok' do
+          expect(response).to have_http_status :ok
+        end
+
+        it 'returns the journal users with new roles' do
+          expect(response.content_type).to eq 'application/json; charset=utf-8'
+          expect(response.body).to include "#{journal_user.id}"
+          expect(response.body).to include "#{journal_user_two.id}"
+          expect(response.body).to include 'viewer'
+          expect(response.body).not_to include 'admin'
+          expect(response.body).not_to include 'participant'
+        end
+
+        it 'updates all of the specified journal users' do
+          # test the outdated values before reloading them
+          expect(journal_user.user_role).to eq 'admin'
+          expect(journal_user_two.user_role).to eq 'participant'
+          journal_user.reload
+          journal_user_two.reload
+          expect(journal_user.user_role).to eq 'viewer'
+          expect(journal_user_two.user_role).to eq 'viewer'
+        end
+      end
+
+      describe 'and with an invalid role' do
+        let(:journals_users_params) do
+          [
+            {journal_user_id: journal_user.id, role: 'viewer'},
+            {journal_user_id: journal_user_two.id, role: 'administrator'},
+          ]
+        end
+
+        # not surfacing the error! or no error!
+        it 'returns unprocessable entity' do
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'does not update ANY of the journal users' do
+          journal_user.reload
+          journal_user_two.reload
+          expect(journal_user.user_role).to eq 'admin'
+          expect(journal_user_two.user_role).to eq 'participant'
+        end
       end
     end
   end
