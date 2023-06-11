@@ -58,14 +58,16 @@ RSpec.describe Api::JournalsUsersController, type: :request do
       end
     end
 
+    # TODO:
     # unhappy edge cases are put off for now since we will implement policies soon
     # and probably will need to set up Faker and more FactoryBot Factories to eliminate some cruft here
   end
 
   describe '#index' do
+    # TODO: eliminate the let! and replace create with build_stubbed...
     let(:journal_id) { journal.id }
-    let(:journal_user) { create(:journals_user, :as_admin, user_id: user.id, journal_id: journal.id) }
-    let(:journal_user_two ) { create(:journals_user, :as_participant, user_id: user_two.id, journal_id: journal.id) }
+    let!(:journal_user) { create(:journals_user, :as_admin, user_id: user.id, journal_id: journal.id) }
+    let!(:journal_user_two ) { create(:journals_user, :as_participant, user_id: user_two.id, journal_id: journal.id) }
     let(:journals_users) { [journal_user, journal_user_two] }
 
     let(:request) { proc { get "/api/journals/#{journal_id}/journals_users" } }
@@ -80,7 +82,6 @@ RSpec.describe Api::JournalsUsersController, type: :request do
       it_behaves_like 'a nonexistent journal'
     end
 
-    # No worky! :(
     describe 'with a valid journal id' do
       let(:journal_id) { journal.id }
 
