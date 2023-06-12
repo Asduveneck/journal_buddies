@@ -156,9 +156,14 @@ RSpec.describe Api::JournalsUsersController, type: :request do
           ]
         end
 
-        # not surfacing the error! or no error!
+        before(:each) { sign_in user; request.call }
+
         it 'returns unprocessable entity' do
           expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'includes an error message' do
+          expect(response.body).to include 'is not a valid user_role'
         end
 
         it 'does not update ANY of the journal users' do

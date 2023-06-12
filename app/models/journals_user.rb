@@ -5,4 +5,5 @@ class JournalsUser < ApplicationRecord
 
   USER_ROLES = { admin: 'admin', prompt_writer: 'prompt_writer', participant: 'participant', viewer: 'viewer' }.freeze
   enum :user_role, USER_ROLES,  _prefix: :user_role
+  validates :user_role, inclusion: { in: USER_ROLES.values }
 end
