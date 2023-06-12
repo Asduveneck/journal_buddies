@@ -192,5 +192,22 @@ RSpec.describe Api::JournalsUsersController, type: :request do
       let(:journal_id) { 'bad_id' }
       it_behaves_like 'a nonexistent journal'
     end
+
+    describe 'with valid params' do
+      let(:journal_user) { create(:journals_user, :as_admin, user_id: user.id, journal_id: journal.id) }
+      let(:journal_user_two ) { create(:journals_user, :as_participant, user_id: user_two.id, journal_id: journal.id) }
+      let(:journals_users_params) do
+        [
+          {journal_user_id: journal_user.id},
+          {journal_user_id: journal_user_two.id},
+        ]
+      end
+
+      before(:each) { sign_in user; request.call }
+
+      it 'returns ok' do
+        expect(response).to have_http_status :ok
+      end
+    end
   end
 end

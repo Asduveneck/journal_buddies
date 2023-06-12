@@ -61,9 +61,9 @@ class Api::JournalsUsersController < ApplicationController
   def destroy
     return unless @journal.present?
 
-    @journals_users = JournalsUser.where(journal_id: @journal.id).where(id: users.pluck(:journal_user_id)).destroy
-
-    if @journals_users.destroyed?
+    # @journals_users = JournalsUser.where(journal_id: @journal.id).where(id: users.pluck(:journal_user_id)).destroy
+    @journals_users = JournalsUser.destroy_by(journal_id: @journal.id, id: users.pluck(:journal_user_id))
+    if @journals_users.all? { |journal_user| journal_user.destroyed? }
       render json: @journals_users, status: :ok
     else
       render json: @journals_users.errors.full_messages, status: :unprocessable_entity
