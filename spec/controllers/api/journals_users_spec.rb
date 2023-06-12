@@ -199,7 +199,6 @@ RSpec.describe Api::JournalsUsersController, type: :request do
       let(:journals_users_params) do
         [
           {journal_user_id: journal_user.id},
-          {journal_user_id: journal_user_two.id},
         ]
       end
 
@@ -207,6 +206,15 @@ RSpec.describe Api::JournalsUsersController, type: :request do
 
       it 'returns ok' do
         expect(response).to have_http_status :ok
+      end
+
+      it 'deletes the specified user' do
+        expect { journal_user.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+
+      it 'does not delete unspecified users' do
+        journal_user_two.reload
+        expect(journal_user_two.destroyed?).to eq false
       end
     end
   end
