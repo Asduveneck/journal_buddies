@@ -40,6 +40,11 @@ RSpec.describe Api::JournalsUsersController, type: :request do
       it_behaves_like 'an unauthorized endpoint'
     end
 
+    describe 'with an invalid journal ID' do
+      let(:journal_id) { 'bad_id' }
+      it_behaves_like 'a nonexistent journal'
+    end
+
     describe 'with valid params' do
       let(:journals_users_params) {
         [
@@ -112,7 +117,6 @@ RSpec.describe Api::JournalsUsersController, type: :request do
       it_behaves_like 'a nonexistent journal'
     end
 
-    # TODO: test response when invalid role given
     describe 'with a valid journal' do
       describe 'and with all valid new roles' do
         let(:journals_users_params) do
@@ -173,6 +177,20 @@ RSpec.describe Api::JournalsUsersController, type: :request do
           expect(journal_user_two.user_role).to eq 'participant'
         end
       end
+    end
+  end
+
+  describe '#delete' do
+    let(:journal_id) { journal.id }
+    let(:request) { proc { delete "/api/journals/#{journal_id}/journals_users", params: { users: journals_users_params } } }
+
+    describe 'when not signed in' do
+      it_behaves_like 'an unauthorized endpoint'
+    end
+
+    describe 'with an invalid journal ID' do
+      let(:journal_id) { 'bad_id' }
+      it_behaves_like 'a nonexistent journal'
     end
   end
 end
