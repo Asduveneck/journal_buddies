@@ -3,7 +3,7 @@ class CreateJournals < ActiveRecord::Migration[7.0]
     create_table :journals do |t|
       t.string :name, null: false, default: ""
       t.text :description, default: ""
-      t.string :visibility, default: ""
+      t.boolean :private_read, default: true
 
       t.timestamps
     end

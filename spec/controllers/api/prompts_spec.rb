@@ -163,7 +163,7 @@ RSpec.describe Api::PromptsController, type: :request do
 
           it 'returns the prompt' do
             expect(response.body).to include title
-          end1
+          end
 
           it 'updates the prompt' do
             prompt.reload
