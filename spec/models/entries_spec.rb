@@ -82,5 +82,4 @@ RSpec.describe ::Entry, type: :model do
       end
     end
   end
-
 end

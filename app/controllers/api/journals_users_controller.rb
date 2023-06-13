@@ -3,7 +3,6 @@ class Api::JournalsUsersController < ApplicationController
   before_action :set_journal, only: %i[ index edit create update destroy ]
 
   # Bulk action to create one or multiple users
-  # below should hopefully work
   def create
     return unless @journal.present?
     return unless users.present?
@@ -61,7 +60,6 @@ class Api::JournalsUsersController < ApplicationController
   def destroy
     return unless @journal.present?
 
-    # @journals_users = JournalsUser.where(journal_id: @journal.id).where(id: users.pluck(:journal_user_id)).destroy
     @journals_users = JournalsUser.destroy_by(journal_id: @journal.id, id: users.pluck(:journal_user_id))
     if @journals_users.all? { |journal_user| journal_user.destroyed? }
       render json: @journals_users, status: :ok
