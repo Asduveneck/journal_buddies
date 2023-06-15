@@ -111,6 +111,19 @@ Devise.setup do |config|
   # won't boot properly.
   # config.reload_routes = true
 
+  # JWT Configuration
+  # Ripped from https://dakotaleemartinez.com/tutorials/devise-jwt-api-only-mode-for-authentication/
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.fetch(:secret_key_base)
+    jwt.dispatch_requests = [
+      ['POST', %r{^/login$}]
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/logout$}]
+    ]
+    jwt.expiration_time = 30.minutes.to_i
+  end
+
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 12. If
   # using other algorithms, it sets how many times you want the password to be hashed.
