@@ -14,11 +14,15 @@ case $COMMAND in
     docker compose run web bin/rails generate migration "$@"
   ;;
 
+  rails-g-serializer | r-g-s )
+    docker compose run web bin/rails generate serializer "$@"
+  ;;
+
   rails-run-migration | rails-db-migrate | r-db-m )
     docker compose run web bin/rails db:migrate "$@"
   ;;
 
-  rails-console | r-c )
+  rails-console | rails-c | r-c )
     docker compose run --rm web bin/rails console
   ;;
 
