@@ -114,6 +114,7 @@ Devise.setup do |config|
 
   # JWT Configuration
   # Ripped from https://dakotaleemartinez.com/tutorials/devise-jwt-api-only-mode-for-authentication/
+  # Very similar, but different key setup here: https://sdrmike.medium.com/rails-7-api-only-app-with-devise-and-jwt-for-authentication-1397211fb97c
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.fetch(:secret_key_base)
     jwt.dispatch_requests = [
