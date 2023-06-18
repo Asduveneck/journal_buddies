@@ -61,9 +61,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # protected
 
   # If you have extra params to permit, append them to the sanitizer.
-  # TODO: CHECK CONFIGURE FOR SIGN IN; and see which of these keys can be removed
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: %i[attribute email user_name first_name last_name password password_confirmation])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[user_name first_name last_name])
   end
 
   # If you have extra params to permit, append them to the sanitizer.
