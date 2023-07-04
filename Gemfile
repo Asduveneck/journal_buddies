@@ -13,6 +13,8 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 
 gem 'devise'
+gem 'devise-jwt'
+gem 'jsonapi-serializer'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -35,7 +37,7 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem "rack-cors"
+gem "rack-cors"
 
 gem 'rubocop', require: false
 group :development, :test do
