@@ -30,6 +30,10 @@ case $COMMAND in
     docker compose run web bundle exec rspec "$@"
   ;;
 
+  rails-init-test-db )
+    docker compose run web bin/rails db:create
+  ;;
+
   * )
     echo "Invalid command"
   ;;
