@@ -21,7 +21,7 @@ RSpec.describe Api::CurrentUsersController, type: :request do
   # CURRENTLY needs the ID...
   describe '#show' do
     let(:request) { proc { get path }}
-    let(:path) { '/api/current_users' }
+    let(:path) { '/api/current_user' }
 
     describe 'when unauthorized' do
       it_behaves_like 'an unauthorized endpoint'
