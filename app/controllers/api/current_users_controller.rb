@@ -25,7 +25,7 @@ class Api::CurrentUsersController < ApplicationController
     params.require(:user).permit(
       :first_name,
       :last_name,
-      :user_name
+      # :user_name
     )
   end
 end
