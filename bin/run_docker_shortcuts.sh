@@ -26,6 +26,10 @@ case $COMMAND in
     docker compose run --rm web bin/rails console
   ;;
 
+  rails-routes | rails-r | routes | r-r )
+    docker compose run --rm web bin/rails routes
+  ;;
+
   rspec )
     docker compose run web bundle exec rspec "$@"
   ;;
