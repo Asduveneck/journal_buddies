@@ -68,6 +68,4 @@ RSpec.describe Api::CurrentUsersController, type: :request do
       end
     end
   end
-
-  # describe '#journals' do end
 end

@@ -14,8 +14,10 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
 
     # get 'current_user', to: 'current_users#show'
-    resource :current_users, only: %i[show update] do
-      get 'journals', to: '#journals'
+    resource :current_users, only: %i[show update]
+
+    namespace :current_users do
+      resources :journals, only: %i[index]
     end
 
     resources :journals do
