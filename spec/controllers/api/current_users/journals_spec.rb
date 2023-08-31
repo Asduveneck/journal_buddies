@@ -18,13 +18,6 @@ RSpec.describe Api::CurrentUsers::JournalsController, type: :request do
     end
   end
 
-
-  # need to create journal users and journals
-    # [x] test when not signed in
-    # [x] test when there are no journal users at all
-    # [ ] test when there are journal users
-      # it returns all journals the user is participating in
-
   describe '#index' do
     let(:request) { proc { get path }}
     let(:path) { '/api/current_users/journals' }
@@ -38,8 +31,25 @@ RSpec.describe Api::CurrentUsers::JournalsController, type: :request do
       before(:each) { sign_in user; request.call }
 
       describe 'and the user has no journals' do
+        it 'returns an empty array' do
+          expect(response.body).to eq [].to_json
+        end
+      end
+
+      describe 'and the user has journals' do
+        let(:user) {
+          create(:user_with_journals, first_name: 'John', last_name: 'Smith', password: 'password', journals_count: 3)
+        }
+        let(:journal_1) { user.journals.first }
+        let(:journal_2) { user.journals.second }
+        let(:journal_3) { user.journals.last }
+
+        before(:each) { sign_in user; request.call }
+
         it 'returns the journals' do
+          expect(response.body).to_not be_empty
           expect(response.body).to include user.journals.to_json
+          expect(response.body).to include journal_1.to_json
         end
       end
     end
