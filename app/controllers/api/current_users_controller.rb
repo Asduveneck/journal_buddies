@@ -19,6 +19,8 @@ class Api::CurrentUsersController < ApplicationController
     params.require(:user).permit(
       :first_name,
       :last_name,
+      # user name was intended to be an alternative way to sign in, but it cannot be used
+      # with the current devise setup.
       # :user_name
     )
   end
