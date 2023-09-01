@@ -12,7 +12,13 @@ Rails.application.routes.draw do
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api, defaults: {format: :json} do
-    # make sure to not have a general journals index
+
+    resource :current_users, only: %i[show update]
+
+    namespace :current_users do
+      resources :journals, only: %i[index]
+    end
+
     resources :journals do
       resources :prompts
       resources :recurring_prompts
