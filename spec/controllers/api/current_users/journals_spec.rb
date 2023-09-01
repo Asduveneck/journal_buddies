@@ -47,7 +47,6 @@ RSpec.describe Api::CurrentUsers::JournalsController, type: :request do
         before(:each) { sign_in user; request.call }
 
         it 'returns the journals' do
-          expect(response.body).to_not be_empty
           expect(response.body).to include user.journals.to_json
           expect(response.body).to include journal_1.to_json
         end

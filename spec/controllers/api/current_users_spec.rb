@@ -18,8 +18,6 @@ RSpec.describe Api::CurrentUsersController, type: :request do
     end
   end
 
-
-  # CURRENTLY needs the ID...
   describe '#show' do
     let(:request) { proc { get path }}
     let(:path) { '/api/current_users' }

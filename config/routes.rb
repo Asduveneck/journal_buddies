@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api, defaults: {format: :json} do
 
-    # get 'current_user', to: 'current_users#show'
     resource :current_users, only: %i[show update]
 
     namespace :current_users do
