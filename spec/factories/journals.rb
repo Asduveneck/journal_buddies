@@ -19,10 +19,13 @@ FactoryBot.define do
         Array.new(prompts_count) { association(:prompt) }
       end
 
-      # needs to be randomized:
-      # users do
-      #   Array.new(users_count) { association(:user) }
-      # end
+      # NOTE: associations don't readily support has many through
+      after(:create) do |journal, evaluator|
+        users = create_list(:user, evaluator.users_count)
+        users.each do |user|
+          create(:journals_user, journal: journal, user: user)
+        end
+      end
     end
   end
 end
