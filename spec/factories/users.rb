@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :user do
     first_name { 'Sam' }
     last_name { 'Duran' }
-    email { 'hello@world.com' }
-    # journal
+    sequence(:email) { |n| "test_email#{n}@example.com" }
+    password { 'weak_password' }
 
     factory :user_with_journals do
       transient do
