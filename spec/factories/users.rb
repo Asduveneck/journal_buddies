@@ -3,6 +3,7 @@ FactoryBot.define do
     first_name { 'Sam' }
     last_name { 'Duran' }
     email { 'hello@world.com' }
+    # journal
 
     factory :user_with_journals do
       transient do

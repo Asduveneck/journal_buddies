@@ -78,12 +78,17 @@ RSpec.describe Api::JournalsController, type: :request do
     end
 
     describe 'with a valid journal id' do
+      let(:journal) { create(:journal_with_both_prompts_and_users, name: 'First journal', prompts_count: 2, recurring_prompts_count: 1, users_count: 3) }
       let(:journal_id) { journal.id }
       it_behaves_like 'an existing journal'
 
       before(:each) { sign_in user; request.call }
 
       it 'returns the journal json' do
+        # currently fails since journal.to_json excludes thea associations
+        # WIP
+        puts response.body
+
         expect(response.body).to include journal.to_json
       end
     end
