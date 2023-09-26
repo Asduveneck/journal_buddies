@@ -22,9 +22,11 @@ class Api::JournalsController < ApplicationController
     render json: @journal, status: :ok, include: {
       prompts: {},
       recurring_prompts: {},
-      journal_users: {
-        include: user: {
-          only: %i[first_name last_name user_name email]
+      journals_users: {
+        include: {
+          user: {
+            only: %i[first_name last_name user_name email]
+          }
         }
       }
     }
