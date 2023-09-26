@@ -19,7 +19,15 @@ class Api::JournalsController < ApplicationController
   def show
     return unless @journal.present?
 
-    render json: @journal, status: :ok
+    render json: @journal, status: :ok, include: {
+      prompts: {},
+      recurring_prompts: {},
+      journal_users: {
+        include: user: {
+          only: %i[first_name last_name user_name email]
+        }
+      }
+    }
   end
 
   def edit
