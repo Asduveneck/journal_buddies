@@ -31,7 +31,7 @@ case $COMMAND in
   ;;
 
   rspec )
-    docker compose run web bundle exec rspec "$@"
+    docker compose run --rm web bundle exec rspec "$@"
   ;;
 
   rails-init-test-db )
