@@ -88,7 +88,6 @@ RSpec.describe Api::JournalsController, type: :request do
 
       # response.to_json and journal.to_json won't match due to the associations in the response
       it 'returns the journal json' do
-
         expect(response_json).to include(
           'id' => journal.id,
           'name' => journal.name,
@@ -112,6 +111,23 @@ RSpec.describe Api::JournalsController, type: :request do
           expect(response_json['recurring_prompts']).to include a_hash_including(
             'id' => recurring_prompt.id,
             'title' => recurring_prompt.title
+          )
+        end
+      end
+
+      it 'returns associated data for the journals_user and user' do
+        expect(response_json['journals_users']).to be_an(Array)
+        expect(response_json['journals_users'].count).to eq journal.journals_users.count
+
+        journal.journals_users.each do |journals_user|
+          expect(response_json['journals_users']).to include a_hash_including(
+            'id' => journals_user.id,
+            'user' => {
+              'first_name' => journals_user.user.first_name,
+              'last_name' => journals_user.user.last_name,
+              'user_name' => journals_user.user.user_name,
+              'email' => journals_user.user.email
+            }
           )
         end
       end
