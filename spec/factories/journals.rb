@@ -3,7 +3,6 @@ FactoryBot.define do
     name { 'My personal reflections' }
     description { 'Simple questions about the mundane daily life' }
   
-  
     factory :journal_with_both_prompts_and_users do
       transient do
         recurring_prompts_count { 3 }
