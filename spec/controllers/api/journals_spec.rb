@@ -96,6 +96,7 @@ RSpec.describe Api::JournalsController, type: :request do
       it 'returns associated data for the prompts and recurring prompts' do
         response_json = JSON.parse(response.body)
         expect(response_json['prompts']).to be_an(Array)
+        expect(response_json['prompts'].count).to eq journal.prompts.count
         journal.prompts.each do |prompt|
           expect(response_json['prompts']).to include a_hash_including(
             'id' => prompt.id,
@@ -104,6 +105,7 @@ RSpec.describe Api::JournalsController, type: :request do
         end
 
         expect(response_json['recurring_prompts']).to be_an(Array)
+        expect(response_json['recurring_prompts'].count).to eq journal.recurring_prompts.count
         journal.recurring_prompts.each do |recurring_prompt|
           expect(response_json['recurring_prompts']).to include a_hash_including(
             'id' => recurring_prompt.id,
