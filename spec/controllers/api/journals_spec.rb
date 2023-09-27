@@ -85,11 +85,31 @@ RSpec.describe Api::JournalsController, type: :request do
       before(:each) { sign_in user; request.call }
 
       it 'returns the journal json' do
-        # currently fails since journal.to_json excludes thea associations
-        # WIP
-        puts response.body
+        response_json = JSON.parse(response.body)
+        expect(response_json).to include(
+          'id' => journal.id,
+          'name' => journal.name,
+          'description' => journal.description,
+        )
+      end
 
-        expect(response.body).to include journal.to_json
+      it 'returns associated data for the prompts and recurring prompts' do
+        response_json = JSON.parse(response.body)
+        expect(response_json['prompts']).to be_an(Array)
+        journal.prompts.each do |prompt|
+          expect(response_json['prompts']).to include a_hash_including(
+            'id' => prompt.id,
+            'title' => prompt.title
+          )
+        end
+
+        expect(response_json['recurring_prompts']).to be_an(Array)
+        journal.recurring_prompts.each do |recurring_prompt|
+          expect(response_json['recurring_prompts']).to include a_hash_including(
+            'id' => recurring_prompt.id,
+            'title' => recurring_prompt.title
+          )
+        end
       end
     end
   end
