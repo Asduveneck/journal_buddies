@@ -80,12 +80,15 @@ RSpec.describe Api::JournalsController, type: :request do
     describe 'with a valid journal id' do
       let(:journal) { create(:journal_with_both_prompts_and_users, name: 'First journal', prompts_count: 2, recurring_prompts_count: 1, users_count: 3) }
       let(:journal_id) { journal.id }
+      let(:response_json) { JSON.parse(response.body) }
+
       it_behaves_like 'an existing journal'
 
       before(:each) { sign_in user; request.call }
 
+      # response.to_json and journal.to_json won't match due to the associations in the response
       it 'returns the journal json' do
-        response_json = JSON.parse(response.body)
+
         expect(response_json).to include(
           'id' => journal.id,
           'name' => journal.name,
@@ -94,7 +97,6 @@ RSpec.describe Api::JournalsController, type: :request do
       end
 
       it 'returns associated data for the prompts and recurring prompts' do
-        response_json = JSON.parse(response.body)
         expect(response_json['prompts']).to be_an(Array)
         expect(response_json['prompts'].count).to eq journal.prompts.count
         journal.prompts.each do |prompt|
