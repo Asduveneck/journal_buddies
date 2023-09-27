@@ -131,6 +131,15 @@ RSpec.describe Api::JournalsController, type: :request do
           )
         end
       end
+
+      it 'restricts the fields returned for the user' do
+        expected_fields = ['first_name', 'last_name', 'user_name', 'email']
+
+        response_json['journals_users'].each do |journal_user_response|
+          user_response = journal_user_response['user']
+          expect(user_response.keys).to contain_exactly *expected_fields
+        end
+      end
     end
   end
 
