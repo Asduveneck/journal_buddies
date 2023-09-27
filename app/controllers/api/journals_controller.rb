@@ -20,8 +20,12 @@ class Api::JournalsController < ApplicationController
     return unless @journal.present?
 
     render json: @journal, status: :ok, include: {
-      prompts: {},
-      recurring_prompts: {},
+      prompts: {
+        exclude: %i[journal_id]
+      },
+      recurring_prompts: {
+        exclude: %i[journal_id]
+      },
       journals_users: {
         include: {
           user: {
