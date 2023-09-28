@@ -1,6 +1,6 @@
 class Api::JournalsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_journal, only: %i[ show edit update destroy ]
+  before_action :set_journal, only: %i[ edit update destroy ]
 
   def create
     @journal = Journal.new(journal_params)
@@ -17,23 +17,27 @@ class Api::JournalsController < ApplicationController
   end
 
   def show
+    @journal = Journal.includes(:prompts, :recurring_prompts, journals_users: [:user]).find_by(id: params[:id])
+    render(status: 404, inline: 'Journal not found') unless @journal
+
     return unless @journal.present?
 
-    render json: @journal, status: :ok, include: {
-      prompts: {
-        exclude: %i[journal_id]
-      },
-      recurring_prompts: {
-        exclude: %i[journal_id]
-      },
-      journals_users: {
-        include: {
-          user: {
-            only: %i[first_name last_name user_name email]
-          }
-        }
-      }
-    }
+    render json: JournalShowSerializer.new(@journal).serializable_hash.to_json, status: :ok, serializer: JournalShowSerializer 
+    # render json: @journal, status: :ok, include: {
+    #   prompts: {
+    #     exclude: %i[journal_id]
+    #   },
+    #   recurring_prompts: {
+    #     exclude: %i[journal_id]
+    #   },
+    #   journals_users: {
+    #     include: {
+    #       user: {
+    #         only: %i[first_name last_name user_name email]
+    #       }
+    #     }
+    #   }
+    # }
   end
 
   def edit
