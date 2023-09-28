@@ -78,13 +78,67 @@ RSpec.describe Api::JournalsController, type: :request do
     end
 
     describe 'with a valid journal id' do
+      let(:journal) { create(:journal_with_both_prompts_and_users, name: 'First journal', prompts_count: 2, recurring_prompts_count: 1, users_count: 3) }
       let(:journal_id) { journal.id }
+      let(:response_json) { JSON.parse(response.body) }
+
       it_behaves_like 'an existing journal'
 
       before(:each) { sign_in user; request.call }
 
+      # response.to_json and journal.to_json won't match due to the associations in the response
       it 'returns the journal json' do
-        expect(response.body).to include journal.to_json
+        expect(response_json).to include(
+          'id' => journal.id,
+          'name' => journal.name,
+          'description' => journal.description,
+        )
+      end
+
+      it 'returns associated data for the prompts and recurring prompts' do
+        expect(response_json['prompts']).to be_an(Array)
+        expect(response_json['prompts'].count).to eq journal.prompts.count
+        journal.prompts.each do |prompt|
+          expect(response_json['prompts']).to include a_hash_including(
+            'id' => prompt.id,
+            'title' => prompt.title
+          )
+        end
+
+        expect(response_json['recurring_prompts']).to be_an(Array)
+        expect(response_json['recurring_prompts'].count).to eq journal.recurring_prompts.count
+        journal.recurring_prompts.each do |recurring_prompt|
+          expect(response_json['recurring_prompts']).to include a_hash_including(
+            'id' => recurring_prompt.id,
+            'title' => recurring_prompt.title
+          )
+        end
+      end
+
+      it 'returns associated data for the journals_user and user' do
+        expect(response_json['journals_users']).to be_an(Array)
+        expect(response_json['journals_users'].count).to eq journal.journals_users.count
+
+        journal.journals_users.each do |journals_user|
+          expect(response_json['journals_users']).to include a_hash_including(
+            'id' => journals_user.id,
+            'user' => {
+              'first_name' => journals_user.user.first_name,
+              'last_name' => journals_user.user.last_name,
+              'user_name' => journals_user.user.user_name,
+              'email' => journals_user.user.email
+            }
+          )
+        end
+      end
+
+      it 'restricts the fields returned for the user' do
+        expected_fields = ['first_name', 'last_name', 'user_name', 'email']
+
+        response_json['journals_users'].each do |journal_user_response|
+          user_response = journal_user_response['user']
+          expect(user_response.keys).to contain_exactly *expected_fields
+        end
       end
     end
   end

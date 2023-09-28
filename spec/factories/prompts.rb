@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :prompt do
     title { 'How was today?' }
+    journal
 
     factory :prompt_with_sibling_entries do
        transient do

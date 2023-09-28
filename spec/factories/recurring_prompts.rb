@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :recurring_prompt do
     title { 'How was today?' }
+    journal
 
     trait :annual do
       schedule_type { 'a' }
