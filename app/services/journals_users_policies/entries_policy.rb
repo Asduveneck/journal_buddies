@@ -25,7 +25,7 @@ class EntriesPolicy
   def delete?
     return false unless user_in_journals_users?
 
-    return author? || user_role == 'admin'
+    return author? || journal_user.admin?
   end
 
   def edit?
@@ -42,10 +42,6 @@ class EntriesPolicy
 
   def user_in_journals_users?
     @user_in_journals_users? ||= @journal_user.present?
-  end
-
-  def user_role
-    @user_role ||= @journal_user&.role || ''
   end
 
   def author?

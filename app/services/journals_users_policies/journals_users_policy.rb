@@ -19,15 +19,15 @@ class JournalsUsersPolicy
 
   def create?
     # what if the journal is brand new? That means there are NO journal users, and therefore no admin
-    return admin_user_role?
+    return journal_user.admin?
   end
 
   def delete?
-    return admin_user_role?
+    return journal_user.admin?
   end
 
   def edit?
-    return admin_user_role?
+    return journal_user.admin?
   end
 
   private
@@ -38,13 +38,5 @@ class JournalsUsersPolicy
 
   def user_in_journals_users?
     @user_in_journals_users? ||= @journal_user.present?
-  end
-
-  def user_role
-    @user_role ||= @journal_user&.role || ''
-  end
-
-  def admin_user_role?
-    @admin_user_role? ||= @user_role == 'admin'
   end
 end
