@@ -1,7 +1,7 @@
 # Draft class to restrict who can view, edit, or delete entries
 # entries can be viewed by everyone if the journal is public, or if they are a journal participant
 # entries can be edited by only the author
-# entries can only be created by participants (maybe...?)
+# entries can only be created by participants
 # entries can be deleted by the author or an admin
 
 class EntriesPolicy
