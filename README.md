@@ -5,6 +5,10 @@
 This project requires docker compose, and to initialize the database:
 
 ```sh
+docker compose up -d db
+docker compose run --rm web bundle exec rails db:prepare
+docker compose up
+
 docker compose run web bin/rails db:create
 docker compose run web bin/rails db:migrate
 ```
